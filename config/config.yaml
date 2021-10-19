@@ -4,14 +4,19 @@ data:
     dataset_dir: '/home/ubuntu/datasets/vox1'
     train_root: 'vox1_dev_wav/wav'
     test_root: 'vox1_test_wav/wav'
-    train_txt: 'data_txt/vox1_train.txt'
+    train_txt: 'data_txt/vox1_train_100.txt'
     n_class: 1251
     sr: 16000
     window: 0.025 #(s)
     hop: 0.01 #(s)
     nmels: 20 #Number of mel energies
     fixed_time: 5 #(s)
-    vad_yes: !!bool "true"
+
+---
+vad:
+    mode:3
+    frame_duration_ms: 10
+
 ---   
 model:
     hidden: 768 #Number of LSTM hidden layer units
@@ -21,9 +26,9 @@ model:
 ---
 train:
     start: 0
-    epochs: 10
+    epochs: 5
     lr: 0.01
-    bs: 64 # batch size
+    bs: 128 # batch size
     logs_root: 'logs'
     ckpt_dir: 'ckpt_TDNN_5s'
     log_epoch: 1 #Epochs before printing progress

@@ -66,9 +66,9 @@ def test_eer(scores,labels):
         if nontarget_scores[nontarget_position] < target_scores[target_position]:
             break
     threshold = target_scores[target_position]
-    print("threshold is --> ", threshold)
+    # print("threshold is --> ", threshold)
     eer = target_position * 1.0 / target_size
-    print("eer is --> ", eer)
+    # print("eer is --> ", eer)
     return threshold, eer
 
 

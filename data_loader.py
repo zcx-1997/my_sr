@@ -94,7 +94,7 @@ class Vox1_TestDataset(Dataset):
 if __name__ == '__main__':
     timer = Timer()
     train_db = Vox1_TrainDataset()
-    train_loader = DataLoader(train_db,batch_size=64,num_workers=6,pin_memory=True,shuffle=False,drop_last=True)
+    train_loader = DataLoader(train_db,batch_size=64, num_workers=6, pin_memory=True, shuffle=False,drop_last=True)
     print(len(train_db))
     print(len(train_loader))
 
@@ -102,6 +102,6 @@ if __name__ == '__main__':
     # x, y = next(iter(train_loader))
     # print('time cost=', timer.stop())
 
-    # for i, (x,y) in enumerate(train_loader):
-    #     print(i,time.ctime())
+    for i, (x,y) in enumerate(train_loader):
+        print(i,time.ctime())
 

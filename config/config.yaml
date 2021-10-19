@@ -4,42 +4,40 @@ data:
     dataset_dir: '/home/ubuntu/datasets/vox1'
     train_root: 'vox1_dev_wav/wav'
     test_root: 'vox1_test_wav/wav'
-    train_txt: 'data_txt/vox1_train_100.txt'
-    n_class: 1251
+    train_txt: 'data_txt/vox1_train.txt'
+    n_class: 1252
     sr: 16000
     window: 0.025 #(s)
     hop: 0.01 #(s)
     nmels: 20 #Number of mel energies
-    fixed_time: 5 #(s)
+    fixed_time: 3 #(s)
 
 ---
 vad:
-    mode:3
-    frame_duration_ms: 10
+    mode: 3
+    frame_duration_ms: 30
+    padding_duration_ms: 300
 
 ---   
 model:
-    hidden: 768 #Number of LSTM hidden layer units
+    hidden: 512 #Number of LSTM hidden layer units
     num_layer: 3 #Number of LSTM layers
     proj: 256 #Embedding size
     save_path: 'ckpt_epoch_25.pth' #Model path for testing, inference, or resuming training
 ---
 train:
     start: 0
-    epochs: 5
-    lr: 0.01
-    bs: 128 # batch size
+    epochs: 20
+    lr: 0.001
+    bs: 64 # batch size
     logs_root: 'logs'
-    ckpt_dir: 'ckpt_TDNN_5s'
+    ckpt_dir: 'ckpt_TDNN_all_3s'
     log_epoch: 1 #Epochs before printing progress
     ckpt_epoch: 1 #Save model after x speaker epochs
-
-
-    restore: !!bool "false" #Resume training from previous model path
 ---
 test:
-    N : 4 #Number of speakers in batch
-    M : 6 #Number of utterances per speaker
+    model_path: 'logs/ckpt_TDNN_100_5s/ckpt_epoch_10.pth'
+    bs: 64
     num_workers: 8 #number of workers for data laoder
     epochs: 10 #testing speaker epochs
 ---

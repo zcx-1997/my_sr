@@ -21,7 +21,7 @@ from hparam import hparam as hp
 def train(device, model_path=None):
 
     checkpoint_dir = os.path.join(hp.train.logs_root,hp.train.ckpt_dir)
-    log_file = os.path.join(checkpoint_dir, 'log')
+    log_file = os.path.join(checkpoint_dir, 'log.txt')
     os.makedirs(checkpoint_dir, exist_ok=True)
 
     message = '==========configure==========\nspeech duration={}s\nepochs={},lr={},batch size={}\n' \
@@ -29,10 +29,9 @@ def train(device, model_path=None):
     with open(log_file, 'a') as f:
         f.write(message + '\n')
 
-
     train_db = Vox1_TrainDataset()
-    train_loader = DataLoader(train_db, batch_size=hp.train.bs,shuffle=True, drop_last=True)
-    # train_loader = DataLoader(train_db, batch_size=hp.train.bs, num_workers=3, pin_memory=True, shuffle=True, drop_last=True)
+    # train_loader = DataLoader(train_db, batch_size=hp.train.bs,shuffle=True, drop_last=True)
+    train_loader = DataLoader(train_db, batch_size=hp.train.bs, num_workers=6, pin_memory=True, shuffle=True, drop_last=True)
     net = TDNN()
     if model_path:
         net.load_state_dict(torch.load(model_path))
@@ -44,7 +43,7 @@ def train(device, model_path=None):
     criterion = nn.CrossEntropyLoss()
     opt = optim.Adam(net.parameters(), lr=hp.train.lr)
     # opt = optim.SGD(net.parameters(), lr=hp.train.lr, momentum= 0.9)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(opt, 'min')
+    # scheduler = optim.lr_scheduler.ReduceLROnPlateau(opt, 'min')
     # scheduler = torch.optim.lr_scheduler.StepLR(opt, step_size=5,gamma=0.1)
 
 
@@ -61,7 +60,7 @@ def train(device, model_path=None):
             opt.zero_grad()
             loss.backward()
             opt.step()
-            scheduler.step(loss)
+            # scheduler.step(loss)
 
             train_loss.append(loss.item())
             total_loss += loss
@@ -74,7 +73,7 @@ def train(device, model_path=None):
                 print("Epoch{},Step[{}/{}]: loss={:.4f},acc={:.4f}, time={}".format(epoch + 1,
                                                                                 step_id + 1, len(train_loader), loss,
                                                                                 correct / len(y), time.ctime()))
-            # time.sleep(0.5)
+            time.sleep(0.1)
 
         total_num = len(train_loader.dataset)
         avg_loss = total_loss / len(train_loader)

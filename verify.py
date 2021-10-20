@@ -9,7 +9,9 @@
 import time
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
+
 
 from data_loader import Vox1_TestDataset
 from models import TDNN
@@ -40,7 +42,7 @@ def main():
         _, embedding2, _ = net(x2)
         score = get_score(embedding1, embedding2)
         scores.extend(score.detach().numpy())
-        labels.extend(label.detach().numpy())
+        labels.extend(label.numpy())
         if (step_id+1) % 10 == 0:
             print("[{}|{}], time={}".format(step_id+1,len(test_loader),time.ctime()))
 
@@ -52,6 +54,9 @@ def main():
 
     dcf = compute_min_dcf(result.fr, result.fa)
     print("dcf=", dcf)
+
+    plt.plot(result.fa,result.fr)
+    plt.show()
 
 if __name__ == "__main__":
     main()

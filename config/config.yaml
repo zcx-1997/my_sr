@@ -26,8 +26,11 @@ model:
     save_path: 'ckpt_epoch_25.pth' #Model path for testing, inference, or resuming training
 ---
 train:
-    start: 0
-    epochs: 20
+    resume: !!bool "true"
+    model_path: 'logs/ckpt_TDNN_all_3s/ckpt_epoch_13.pth'
+
+    start: 13
+    epochs: 12
     lr: 0.001
     bs: 64 # batch size
     logs_root: 'logs'
@@ -36,7 +39,7 @@ train:
     ckpt_epoch: 1 #Save model after x speaker epochs
 ---
 test:
-    model_path: 'logs/ckpt_TDNN_100_5s/ckpt_epoch_10.pth'
+    model_path: 'logs/ckpt_TDNN_all_3s/ckpt_epoch_7.pth'
     bs: 64
     num_workers: 8 #number of workers for data laoder
     epochs: 10 #testing speaker epochs
